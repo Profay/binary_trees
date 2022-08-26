@@ -1,67 +1,40 @@
 #include "binary_trees.h"
+#include "9-binary_tree_height.c"
 /**
- * getMax - function that return the max between 2 int
- * @a: 1er int (size left)
- * @b:secound int (size right)
- * Return: the max between int a and b.
+ *print_level - print the nodes by level
+ *@func: pointer to a functionn
+ *@level: the level
+ *@node: pointer to the node
+ *Return: nothing
  */
-int getMax(int a, int b)
+void print_level(binary_tree_t *node, void (*func)(int), int level)
 {
-	if (a >= b)
-		return (a);
-	else
-		return (b);
+if (node != NULL && func != NULL)
+{
+if (level == 1)
+func(node->n);
+if (level > 1)
+{
+print_level(node->left, func, level - 1);
+print_level(node->right, func, level - 1);
+}
+}
 }
 /**
- * binary_tree_height - measures the height of a binary tree
- * @tree: a pointer to the(tree node of the tree to measure the height
- * Return: 0 if tree is NULL
+ *binary_tree_levelorder - level-order traversal
+ *@tree: pointer to the tree
+ *@func: pointer to a function
+ *Return: nothing
  */
-size_t binary_tree_height(const binary_tree_t *tree)
-{
-	size_t left_height = 0;
-	size_t right_height = 0;
-
-	if (tree == NULL)
-	{
-		return (0);
-	}
-	left_height = binary_tree_height(tree->left) + 1;
-	right_height = binary_tree_height(tree->right) + 1;
-		return (getMax(left_height, right_height));
-}
-/**
- * printCurrentLevel - print a current level
- * @tree: a pointer to the tree node
- * @func: a pointer to a function to call for each node
- * @level: level of depth(int)
- * Return: Nothing
- */
-void printCurrentLevel(const binary_tree_t *tree, int level, void (*func)(int))
-{
-	if (tree == NULL || func == NULL)
-		return;
-	if (level == 1)
-		func(tree->n);
-	else if (level > 1)
-	{
-		printCurrentLevel(tree->left, level - 1, func);
-		printCurrentLevel(tree->right, level - 1, func);
-	}
-}
-/**
- * binary_tree_levelorder - goes through using level-order traversal
- * @tree: a pointer to the(tree node of the tree to traverse
- * @func: a pointer to a function to call for each node
- * Return: Nothing
- **/
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	int h = binary_tree_height(tree);
-	int i;
+size_t height = 0;
+size_t counter;
+binary_tree_t *copy_tree = (binary_tree_t *)tree;
 
-	if (tree == NULL || func == NULL)
-		return;
-	for (i = 1; i <= h; i++)
-		printCurrentLevel(tree, i, func);
+if (tree == NULL || func == NULL)
+return;
+height = binary_tree_height(tree);
+for (counter = 0; counter <= height + 1; counter++)
+print_level(copy_tree, func, counter);
 }
